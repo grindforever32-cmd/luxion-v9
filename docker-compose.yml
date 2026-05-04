@@ -1,0 +1,21 @@
+# docker-compose.yml for Luxion Omega V9 v4.4
+version: '3.9'
+
+services:
+  luxion:
+    build: .
+    container_name: luxion-v9
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./ledger:/app/ledger
+      - ./memory:/app/memory
+      - ./artifacts:/app/artifacts
+    environment:
+      - GROK_API_KEY=${GROK_API_KEY}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/luxion_live_telemetry.json"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
